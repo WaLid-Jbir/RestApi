@@ -11,7 +11,7 @@ const contactSchema = new mongoose.Schema({
         unique: true,
     },
     phone: {
-        type: Number,
+        type: String,
         required: [true, "Phone is required"],
     }
 }, { timestamps: true } );

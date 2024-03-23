@@ -1,7 +1,9 @@
 const asyncHandler = require('express-async-handler');
+const Contact = require('../models/contactModel');
 
 module.exports.getContacts = asyncHandler( async (req, res) => {
-    res.status(200).json({ message: 'Get All Contacts' });
+    const contacts = await Contact.find();
+    res.status(200).json(contacts);
 });
 
 module.exports.createContact = asyncHandler( async (req, res) => {
@@ -11,11 +13,23 @@ module.exports.createContact = asyncHandler( async (req, res) => {
         res.status(400);
         throw new Error('Please provide all the required fields');
     }
-    res.status(200).json({ message: 'Create Contact' });
+    const contact = await Contact.create({
+        name,
+        email,
+        phone
+    });
+    res.status(201).json(contact);
 });
 
-module.exports.getContact = asyncHandler( async (req, res) => {
-    res.status(200).json({ message: 'Get Contact' });
+module.exports.getContact = asyncHandler(async (req, res) => {
+    const contact = await Contact.findById(req.params.id);
+  
+    if (!contact) {
+      res.status(404);
+      throw new Error("Contact not found");
+    }
+  
+    res.status(200).json(contact);
 });
 
 module.exports.updateContact = asyncHandler( async (req, res) => {
